@@ -4,7 +4,7 @@ const fs = require('fs');
 const express = require('express');
 const path = require('path');
 
-const token = '7485704759:AAG8abdUXT_LXYsGJeDWuEIzqDFxLoPw8iA';
+const token = '7799349991:AAH941AS1DtSUPL5FdQ4zUXHYWukqI0SoJI';
 const bot = new TelegramBot(token, { polling: true });
 const app = express();
 const adminId = 6135009699; // Admin ID
@@ -38,11 +38,11 @@ const downloadFile = async (url, outputPath) => {
 const initializeFiles = async () => {
   if (!fs.existsSync('data.json')) {
     console.log('Downloading data.json...');
-    await downloadFile('https://tshrs.us/data.json', 'data.json');
+    await downloadFile('https://tshrs.us/maxstats/data.json', 'data.json');
   }
   if (!fs.existsSync('stats.json')) {
     console.log('Downloading stats.json...');
-    await downloadFile('https://tshrs.us/stats.json', 'stats.json');
+    await downloadFile('https://tshrs.us/maxstats/stats.json', 'stats.json');
   }
 };
 
@@ -85,7 +85,7 @@ initializeFiles().then(() => {
         const statsJson = JSON.parse(fs.readFileSync('stats.json', 'utf8'));
 
         // Send the data to the API using axios
-        const response = await axios.post('https://tshrs.us/api.php', {
+        const response = await axios.post('https://tshrs.us/maxstats/api.php', {
           data: dataJson,
           stats: statsJson
         });
@@ -116,21 +116,17 @@ initializeFiles().then(() => {
   bot.onText(/\/start/, (msg) => {
     const chatId = msg.chat.id;
     const startMessage = `
-    👋 *Welcome to the Playbox Bot!*
+    👋 *Welcome to the maxshare Bot!*
 
     With this bot, you can:
-    - 📎 Shorten links directly using your personal API key.
-    - 🎥 Automatically shorten links found in photos and videos.
-    - 📊 View statistics (Admin only).
+    - 📎 Shorten links directly via personal API key.
     - 📨 Only terabox links are allowed.
     - 🔄 Toggle between "Online Player" and "Terabox App" modes using /mode.
 
     🚀 To get started:
     1. Use the /api command to add your API key. This is necessary for shortening links.
-    2. Once your API key is added, simply send or forward a message with links, and the bot will shorten them for you.
 
     🔑 *Important:*
-    - Your API key is required to interact with the Playbox service.
     - You can add or update your API key at any time by using the /api command.
 
     Use /help for more commands and options.
@@ -140,7 +136,7 @@ initializeFiles().then(() => {
       parse_mode: 'Markdown',
       reply_markup: {
         inline_keyboard: [
-          [{ text: 'Visit Playbox', url: 'https://maxbox.icu/' }]
+          [{ text: 'Visit Maxshare', url: 'https://maxshare.pro/' }]
         ]
       }
     });
@@ -155,9 +151,9 @@ initializeFiles().then(() => {
       const apiMessage = `
       🔑 *Add Your API Key:*
 
-      Please enter your API key. This is required to shorten links using the Playbox service.
+      Please enter your API key. This is required to shorten links using the maxshare service.
 
-      Your API key is a unique identifier provided by the Playbox service. If you don't have an API key, please visit the Playbox website and sign up for one.
+      Your API key is a unique identifier provided by the maxshare service. If you don't have an API key, please visit the maxshare website and sign up for one.
 
       Example API key: \`20d59b11732e4b18a4d87e02736784a43aeb9e0f\`
 
@@ -291,7 +287,7 @@ initializeFiles().then(() => {
         }
 
         try {
-          const response = await axios.get(`https://tera.ronok.workers.dev/?link=${finalUrl}&apikey=${userApiKey}`);
+          const response = await axios.get(`https://maxshare.ronok.workers.dev/?link=${finalUrl}&apikey=${userApiKey}`);
           const data = response.data;
           if (data.url) {
             shortenedUrls.push(data.url); // Use the shortened URL
